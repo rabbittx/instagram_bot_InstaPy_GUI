@@ -1,0 +1,1 @@
+{'dont_like': ['aalaam'], 'ignore_list': ['asdsad'], 'friend_list': ['sadsadsa', 'sadsad'], 'tags_list': ['funy'], 'target_list': ['clip_archive'], 'Business_Target_list': ['weqweqwe'], 'comments_list': [' sadsad sad asd wqe']}
