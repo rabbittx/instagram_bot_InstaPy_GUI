@@ -12,14 +12,15 @@ import re
 # TODO open firefox in GUI
 # TODO show logs in GUI
 # TODO get amount from user
-
 # TODO need to make work with server >>>server side need to add <<<
+
 # make all activity work form server side
 
 
 # I Pick This Project To Learn QT and more Python
 # to use this bot you need install instapy lib
 # pip install instapy
+# firefox and geckodriver is need to
 # do not user your main instagram account some time instagram block you
 
 
@@ -28,22 +29,6 @@ import re
 # RE for hashtags
 # (?:#)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)
 # do_like make 10 for ea 1 amount
-
-def lstr_to_nstr(lstr):
-    strs = lstr
-    nstr = re.sub(r'[?|$|.|!]', r'', strs)
-    nestr = re.sub(r'[^a-zA-Z0-9 ]', r'', nstr)
-    return nestr
-
-
-def remove_white_space(tag):
-    while tag[-1] == "":
-        del tag[-1]
-        tag = tag
-    while tag[0] == "":
-        del tag[0]
-        tag = tag
-    return tag
 
 
 class Bot(QMainWindow):
@@ -58,11 +43,10 @@ class Bot(QMainWindow):
         self.Business_Target_list = []
         self.comments_list = []
         self.session = None
-        self.win = None
         self.MainPage = loadUi("GuiQt/mainpage.ui")
         self.profile = loadUi("GuiQt/profile.ui")
         self.login_Page = loadUi("GuiQt/login.ui")
-
+        self.live_Report = loadUi("GuiQt/LiveReport.ui")
         self.MainPage.show()
 
         self.main_page_button()
@@ -82,7 +66,7 @@ class Bot(QMainWindow):
         self.MainPage.stopB.clicked.connect(self.stop_bot)
         self.MainPage.endB.clicked.connect(self.end_bot)
         self.MainPage.profileB.clicked.connect(self.show_profile)
-        self.MainPage.showbord.appendPlainText("salam")
+        self.MainPage.live_reportB.clicked.connect(self.showreport)
 
     def profile_page_button(self):
         # TODO profile page button here !
@@ -117,7 +101,7 @@ class Bot(QMainWindow):
                                     skip_no_profile_pic=False,
                                     skip_business=True, )
         self.session.login()
-
+        self.close_login_page()
         return self.session
 
     def close_login_page(self):
@@ -193,15 +177,15 @@ class Bot(QMainWindow):
         self.Business_Target_list = self.profile.BtargetList.text()
         self.comments_list = self.profile.commentsList.text()
 
-        self.dont_like = remove_white_space(self.dont_like.split(" "))
-        self.ignore_list = remove_white_space(self.ignore_list.split(" "))
-        self.friend_list = remove_white_space(self.friend_list.split(" "))
-        self.tags_list = remove_white_space(self.tags_list.split(" "))
-        self.target_list = remove_white_space(self.target_list.split(" "))
-        self.Business_Target_list = remove_white_space(self.Business_Target_list.split(" "))
+        self.dont_like = self.remove_white_space(self.dont_like.split(" "))
+        self.ignore_list = self.remove_white_space(self.ignore_list.split(" "))
+        self.friend_list = self.remove_white_space(self.friend_list.split(" "))
+        self.tags_list = self.remove_white_space(self.tags_list.split(" "))
+        self.target_list = self.remove_white_space(self.target_list.split(" "))
+        self.Business_Target_list = self.remove_white_space(self.Business_Target_list.split(" "))
 
         # split(" ") is not work for comments need to remake it make it 2 space just for now
-        self.comments_list = remove_white_space(self.comments_list.split("  "))
+        self.comments_list = self.remove_white_space(self.comments_list.split("  "))
 
     def close_profile(self):
         self.profile.hide()
@@ -230,17 +214,34 @@ class Bot(QMainWindow):
         self.target_list = (info['target_list'])
         self.Business_Target_list = (info['Business_Target_list'])
         self.comments_list = (info['comments_list'])
-        self.profile.dontList.setText(lstr_to_nstr(str(self.dont_like)))
-        self.profile.ignoreList.setText(lstr_to_nstr(str(self.ignore_list)))
-        self.profile.friendList.setText(lstr_to_nstr(str(self.friend_list)))
-        self.profile.tagsList.setText(lstr_to_nstr(str(self.tags_list)))
-        self.profile.targetList.setText(lstr_to_nstr(str(self.target_list)))
-        self.profile.BtargetList.setText(lstr_to_nstr(str(self.Business_Target_list)))
-        self.profile.commentsList.setText(lstr_to_nstr(str(self.comments_list)))
+        self.profile.dontList.setText(self.lstr_to_nstr(str(self.dont_like)))
+        self.profile.ignoreList.setText(self.lstr_to_nstr(str(self.ignore_list)))
+        self.profile.friendList.setText(self.lstr_to_nstr(str(self.friend_list)))
+        self.profile.tagsList.setText(self.lstr_to_nstr(str(self.tags_list)))
+        self.profile.targetList.setText(self.lstr_to_nstr(str(self.target_list)))
+        self.profile.BtargetList.setText(self.lstr_to_nstr(str(self.Business_Target_list)))
+        self.profile.commentsList.setText(self.lstr_to_nstr(str(self.comments_list)))
 
     def showreport(self):
-        self.session.live_report()
+        self.live_Report.show()
+        report = self.session.live_report()
+        print(report)
+        self.live_Report.liveReport.setText(report)
 
+    def lstr_to_nstr(self, lstr):
+        strs = lstr
+        nstr = re.sub(r'[?|$|.|!]', r'', strs)
+        nestr = re.sub(r'[^a-zA-Z0-9 ]', r'', nstr)
+        return nestr
+
+    def remove_white_space(self, tag):
+        while tag[-1] == "":
+            del tag[-1]
+            tag = tag
+        while tag[0] == "":
+            del tag[0]
+            tag = tag
+        return tag
 
 
 if __name__ == '__main__':
