@@ -1,1 +1,1 @@
-{'dont_like': ['aalaam'], 'ignore_list': ['asdsad'], 'friend_list': ['sadsadsa', 'sadsad'], 'tags_list': ['funy'], 'target_list': ['clip_archive'], 'Business_Target_list': ['weqweqwe'], 'comments_list': [' sadsad sad asd wqe']}
+{'dont_like': ['region', 'terrorist', 'mason'], 'ignore_list': ['tataloo', 'government', 'Religion'], 'friend_list': ['rabbittlife', 'cliparchive'], 'tags_list': ['fun', 'clip', 'funy'], 'target_list': ['cliparchive'], 'Business_Target_list': ['cliparchive'], 'comments_list': ['cool', 'nice good one']}

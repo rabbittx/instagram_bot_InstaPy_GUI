@@ -15,7 +15,7 @@ import re
 # TODO need to make work with server >>>server side need to add <<<
 
 # make all activity work form server side
-
+# profile page need some change (get amount from user and more info)
 
 # I Pick This Project To Learn QT and more Python
 # to use this bot you need install instapy lib
@@ -42,13 +42,19 @@ class Bot(QMainWindow):
         self.target_list = []
         self.Business_Target_list = []
         self.comments_list = []
+        self.amount_like = 0
+        self.amount_follow = 0
+        self.amount_unfollow = 0
+        self.amount_mix = 0
+
         self.session = None
         self.MainPage = loadUi("GuiQt/mainpage.ui")
         self.profile = loadUi("GuiQt/profile.ui")
         self.login_Page = loadUi("GuiQt/login.ui")
         self.live_Report = loadUi("GuiQt/LiveReport.ui")
+        self.amount_page = loadUi("GuiQt/amount.ui")
         self.MainPage.show()
-
+        self.show_amount_button()
         self.main_page_button()
         self.profile_page_button()
 
@@ -66,6 +72,7 @@ class Bot(QMainWindow):
         self.MainPage.stopB.clicked.connect(self.stop_bot)
         self.MainPage.endB.clicked.connect(self.end_bot)
         self.MainPage.profileB.clicked.connect(self.show_profile)
+        # live_report not work
         self.MainPage.live_reportB.clicked.connect(self.showreport)
 
     def profile_page_button(self):
@@ -74,6 +81,58 @@ class Bot(QMainWindow):
         self.profile.applyB.clicked.connect(self.apply_profile)
         self.profile.closeB.clicked.connect(self.close_profile)
         self.profile.autoB.clicked.connect(self.auto_fill_profile)
+        self.profile.amountB.clicked.connect(self.show_amount)
+
+    def show_amount_button(self):
+        self.amount_page.saveB.clicked.connect(self.save_amount)
+        self.amount_page.closeB.clicked.connect(self.close_amount)
+        self.amount_page.applyB.clicked.connect(self.apply_amount)
+        self.amount_page.autoB.clicked.connect(self.auto_fill_amount)
+
+    def apply_amount(self):
+        # check to just get int not more as 150 move for max
+        self.amount_like = self.amount_page.like_amount.text()
+        self.amount_follow = self.amount_page.follow_amount.text()
+        self.amount_unfollow = self.amount_page.unfollow_amount.text()
+        self.amount_mix = self.amount_page.mix_amount.text()
+
+    def auto_fill_amount(self):
+        with open('profile info/amount_info.txt', 'r', encoding='utf-8') as f:
+            for lines in f:
+                f.readline()
+
+        info = literal_eval(lines)
+        print(info)
+        self.amount_like = (info["like"])
+        self.amount_follow = info["follow"]
+        self.amount_unfollow = info["unfollow"]
+        self.amount_mix = info["mix"]
+        # need to change to int
+        self.amount_page.like_amount.setText(self.amount_like)
+        self.amount_page.follow_amount.setText(self.amount_follow)
+        self.amount_page.unfollow_amount.setText(self.amount_unfollow)
+        self.amount_page.mix_amount.setText(self.amount_mix)
+
+    def show_amount(self):
+        self.amount_page.show()
+
+    def save_amount(self):
+        amount_size = ["like","follow","unfollow","mix"]
+
+        data = [self.amount_like,
+        self.amount_follow,
+        self.amount_unfollow,
+        self.amount_mix]
+
+
+        with open('profile info/amount_info.txt', 'w', encoding='utf-8') as f:
+            info = dict(zip(amount_size, data))
+
+            f.write("%s" % info)
+
+    def close_amount(self):
+        self.amount_page.hide()
+        self.profile.show()
 
         # TODO need to fix login when set login_page_button in init it not work
     def login_bot(self):
@@ -88,6 +147,8 @@ class Bot(QMainWindow):
                                headless_browser=False,
                                disable_image_load=True,
                                show_logs=True)
+
+
         self.session.set_simulation(enabled=True)
         self.session.set_relationship_bounds(enabled=True,
                                              potency_ratio=None,
@@ -110,24 +171,24 @@ class Bot(QMainWindow):
 
     def do_like(self):
         self.session.like_by_tags(self.tags_list,
-                                  amount=random.randint(1, 2),
+                                  amount=int(self.amount_like),
                                   interact=True)
 
     def do_follow(self):
         self.session.follow_user_followers(self.target_list,
-                                           amount=random.randint(1, 1),
+                                           amount=self.amount_follow,
                                            randomize=True,
                                            sleep_delay=random.randint(26, 38),
                                            interact=True)
 
     def do_unfollow(self):
-        self.session.unfollow_users(amount=50,
+        self.session.unfollow_users(amount=self.amount_unfollow,
                                     allFollowing=True,
                                     style="RANDOM",
                                     sleep_delay=random.randint(26, 38))
 
     def do_mix(self):
-        self.session.set_user_interact(amount=3, randomize=True, percentage=100,
+        self.session.set_user_interact(amount=self.amount_mix, randomize=True, percentage=100,
                                        media='Photo')
         self.session.set_do_like(enabled=True, percentage=98)
         self.session.set_do_comment(enabled=True, percentage=25)
@@ -151,7 +212,7 @@ class Bot(QMainWindow):
     def do_comments(self):
         self.session.set_user_interact(amount=3, randomize=True, percentage=100,
                                        media='Photo')
-        self.session.set_do_comment(enabled=True, percentage=67)
+        self.session.set_do_comment(enabled=True, percentage=100)
         self.session.set_comments(self.comments_list, media='Photo')
 
     def start_bot(self):
@@ -199,7 +260,7 @@ class Bot(QMainWindow):
 
         with open('profile info/profile.txt', 'w', encoding='utf-8') as f:
             info = dict(zip(name, data))
-            f.write("%s" % info)
+            f.write("%s" % info )
 
     def auto_fill_profile(self):
         with open('profile info/profile.txt', 'r', encoding='utf-8') as f:
@@ -242,6 +303,7 @@ class Bot(QMainWindow):
             del tag[0]
             tag = tag
         return tag
+
 
 
 if __name__ == '__main__':
