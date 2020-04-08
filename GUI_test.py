@@ -42,10 +42,10 @@ class Bot(QMainWindow):
         self.target_list = []
         self.Business_Target_list = []
         self.comments_list = []
-        self.amount_like = 0
-        self.amount_follow = 0
-        self.amount_unfollow = 0
-        self.amount_mix = 0
+        self.amount_like = None
+        self.amount_follow = None
+        self.amount_unfollow = None
+        self.amount_mix = None
 
         self.session = None
         self.MainPage = loadUi("GuiQt/mainpage.ui")
@@ -54,12 +54,15 @@ class Bot(QMainWindow):
         self.live_Report = loadUi("GuiQt/LiveReport.ui")
         self.amount_page = loadUi("GuiQt/amount.ui")
         self.MainPage.show()
-        self.show_amount_button()
+        self.bot_buttons()
+
+    """ ************************************************************* """
+    """ **************** all buttons is here !*********************** """
+
+    def bot_buttons(self):
         self.main_page_button()
         self.profile_page_button()
-
-    def showBord(self):
-        self.MainPage.showbord()
+        self.show_amount_button()
 
     def main_page_button(self):
         # TODO MainPage Button need to fix
@@ -89,57 +92,14 @@ class Bot(QMainWindow):
         self.amount_page.applyB.clicked.connect(self.apply_amount)
         self.amount_page.autoB.clicked.connect(self.auto_fill_amount)
 
-    def apply_amount(self):
-        # check to just get int not more as 150 move for max
-        self.amount_like = self.amount_page.like_amount.text()
-        self.amount_follow = self.amount_page.follow_amount.text()
-        self.amount_unfollow = self.amount_page.unfollow_amount.text()
-        self.amount_mix = self.amount_page.mix_amount.text()
+    """ **************************** END ****************************** """
 
-    def auto_fill_amount(self):
-        with open('profile info/amount_info.txt', 'r', encoding='utf-8') as f:
-            for lines in f:
-                f.readline()
-
-        info = literal_eval(lines)
-        print(info)
-        self.amount_like = (info["like"])
-        self.amount_follow = info["follow"]
-        self.amount_unfollow = info["unfollow"]
-        self.amount_mix = info["mix"]
-        # need to change to int
-        self.amount_page.like_amount.setText(self.amount_like)
-        self.amount_page.follow_amount.setText(self.amount_follow)
-        self.amount_page.unfollow_amount.setText(self.amount_unfollow)
-        self.amount_page.mix_amount.setText(self.amount_mix)
-
-    def show_amount(self):
-        self.amount_page.show()
-
-    def save_amount(self):
-        amount_size = ["like","follow","unfollow","mix"]
-
-        data = [self.amount_like,
-        self.amount_follow,
-        self.amount_unfollow,
-        self.amount_mix]
-
-
-        with open('profile info/amount_info.txt', 'w', encoding='utf-8') as f:
-            info = dict(zip(amount_size, data))
-
-            f.write("%s" % info)
-
-    def close_amount(self):
-        self.amount_page.hide()
-        self.profile.show()
-
-        # TODO need to fix login when set login_page_button in init it not work
+    """ ********************** mainPage activity ********************** """
     def login_bot(self):
         self.login_Page.show()
         self.login_Page.loginb.clicked.connect(self.make_session)
 
-    def make_session(self, username="", password=""):
+    def make_session(self):
         username = self.login_Page.username.text()
         password = self.login_Page.password.text()
         self.session = InstaPy(username=username,
@@ -147,7 +107,6 @@ class Bot(QMainWindow):
                                headless_browser=False,
                                disable_image_load=True,
                                show_logs=True)
-
 
         self.session.set_simulation(enabled=True)
         self.session.set_relationship_bounds(enabled=True,
@@ -196,7 +155,6 @@ class Bot(QMainWindow):
         self.session.set_do_follow(enabled=True, percentage=80)
 
         number = random.randint(3, 5)
-        random_targets = self.target_list
 
         if len(self.target_list) <= number:
             random_targets = self.target_list
@@ -229,6 +187,16 @@ class Bot(QMainWindow):
     def show_profile(self):
         self.profile.show()
 
+    def showreport(self):
+        self.live_Report.show()
+        report = self.session.live_report()
+        print(report)
+        self.live_Report.liveReport.setText(report)
+
+    """ **************************** END ****************************** """
+
+    """ ********************** ProfilePage activity ******************* """
+
     def apply_profile(self):
         self.dont_like = self.profile.dontList.text()
         self.ignore_list = self.profile.ignoreList.text()
@@ -250,52 +218,113 @@ class Bot(QMainWindow):
 
     def close_profile(self):
         self.profile.hide()
+
         self.MainPage.show()
 
     def save_profile(self):
         name = ['dont_like', 'ignore_list', 'friend_list', 'tags_list', 'target_list', 'Business_Target_list',
                 'comments_list']
 
-        data = [self.dont_like, self.ignore_list, self.friend_list, self.tags_list, self.target_list, self.Business_Target_list, self.comments_list]
+        data = [self.dont_like, self.ignore_list, self.friend_list, self.tags_list, self.target_list,
+                self.Business_Target_list, self.comments_list]
 
         with open('profile info/profile.txt', 'w', encoding='utf-8') as f:
             info = dict(zip(name, data))
-            f.write("%s" % info )
+            f.write("%s" % info)
 
     def auto_fill_profile(self):
+        # read info from text file and get it as list that is why i use self.lstr_to_nstr(str)
+        # need find better way to read them as str
         with open('profile info/profile.txt', 'r', encoding='utf-8') as f:
             for lines in f:
                 f.readline()
 
         info = literal_eval(lines)
-        self.dont_like = (info['dont_like'])
-        self.ignore_list = (info['ignore_list'])
-        self.friend_list = (info['friend_list'])
-        self.tags_list = (info['tags_list'])
-        self.target_list = (info['target_list'])
-        self.Business_Target_list = (info['Business_Target_list'])
-        self.comments_list = (info['comments_list'])
-        self.profile.dontList.setText(self.lstr_to_nstr(str(self.dont_like)))
-        self.profile.ignoreList.setText(self.lstr_to_nstr(str(self.ignore_list)))
-        self.profile.friendList.setText(self.lstr_to_nstr(str(self.friend_list)))
-        self.profile.tagsList.setText(self.lstr_to_nstr(str(self.tags_list)))
-        self.profile.targetList.setText(self.lstr_to_nstr(str(self.target_list)))
-        self.profile.BtargetList.setText(self.lstr_to_nstr(str(self.Business_Target_list)))
-        self.profile.commentsList.setText(self.lstr_to_nstr(str(self.comments_list)))
 
-    def showreport(self):
-        self.live_Report.show()
-        report = self.session.live_report()
-        print(report)
-        self.live_Report.liveReport.setText(report)
+        self.dont_like = info['dont_like']
+        self.ignore_list = info['ignore_list']
+        self.friend_list = info['friend_list']
+        self.tags_list = info['tags_list']
+        self.target_list = info['target_list']
+        self.Business_Target_list = info['Business_Target_list']
+        self.comments_list = info['comments_list']
 
-    def lstr_to_nstr(self, lstr):
-        strs = lstr
-        nstr = re.sub(r'[?|$|.|!]', r'', strs)
-        nestr = re.sub(r'[^a-zA-Z0-9 ]', r'', nstr)
-        return nestr
+        # self.lstr_to_nstr(str)
 
-    def remove_white_space(self, tag):
+        self.dont_like = lstr_to_nstr(str(self.dont_like))
+        self.ignore_list = lstr_to_nstr(str(self.ignore_list))
+        self.friend_list = lstr_to_nstr(str(self.friend_list))
+        self.tags_list = lstr_to_nstr(str(self.tags_list))
+        self.target_list = lstr_to_nstr(str(self.target_list))
+        self.Business_Target_list = lstr_to_nstr(str(self.Business_Target_list))
+        self.comments_list = lstr_to_nstr(str(self.comments_list))
+
+        self.profile.dontList.setText(self.dont_like)
+        self.profile.ignoreList.setText(self.ignore_list)
+        self.profile.friendList.setText(self.friend_list)
+        self.profile.tagsList.setText(self.tags_list)
+        self.profile.targetList.setText(self.target_list)
+        self.profile.BtargetList.setText(self.Business_Target_list)
+        self.profile.commentsList.setText(self.comments_list)
+
+    """ **************************** END ****************************** """
+
+    """ ********************** amountPage activity ******************* """
+
+    def apply_amount(self):
+        # check to just get int not more as 150 move for max
+        self.amount_like = self.amount_page.like_amount.text()
+        self.amount_follow = self.amount_page.follow_amount.text()
+        self.amount_unfollow = self.amount_page.unfollow_amount.text()
+        self.amount_mix = self.amount_page.mix_amount.text()
+
+    def auto_fill_amount(self):
+        with open('profile info/amount_info.txt', 'r', encoding='utf-8') as f:
+            for lines in f:
+                f.readline()
+
+        info = literal_eval(lines)
+        print(info)
+        self.amount_like = info["like"]
+        self.amount_follow = info["follow"]
+        self.amount_unfollow = info["unfollow"]
+        self.amount_mix = info["mix"]
+        # need to change to int
+        self.amount_page.like_amount.setText(self.amount_like)
+        self.amount_page.follow_amount.setText(self.amount_follow)
+        self.amount_page.unfollow_amount.setText(self.amount_unfollow)
+        self.amount_page.mix_amount.setText(self.amount_mix)
+        self.amount_like = int(self.amount_like)
+        self.amount_follow = int(self.amount_follow)
+        self.amount_unfollow = int(self.amount_unfollow)
+        self.amount_mix = int(self.amount_mix)
+
+    def show_amount(self):
+        self.amount_page.show()
+
+    def save_amount(self):
+        amount_size = ["like", "follow", "unfollow", "mix"]
+
+        data = [self.amount_like,
+                self.amount_follow,
+                self.amount_unfollow,
+                self.amount_mix]
+
+        with open('profile info/amount_info.txt', 'w', encoding='utf-8') as f:
+            info = dict(zip(amount_size, data))
+
+            f.write("%s" % info)
+
+    def close_amount(self):
+        self.amount_page.hide()
+        self.profile.show()
+
+    """ **************************** END ****************************** """
+
+    """ ********************** other  function  ******************* """
+
+    @staticmethod
+    def remove_white_space(tag):
         while tag[-1] == "":
             del tag[-1]
             tag = tag
@@ -304,6 +333,14 @@ class Bot(QMainWindow):
             tag = tag
         return tag
 
+    """ **************************** END ****************************** """
+
+
+def lstr_to_nstr(lstr):
+    strs = lstr
+    nstr = re.sub(r'[?|$|.|!]', r'', strs)
+    nestr = re.sub(r"[^a-zA-Z0-9 ]", r'', nstr)
+    return nestr
 
 
 if __name__ == '__main__':
