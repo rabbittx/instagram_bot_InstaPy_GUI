@@ -10,6 +10,18 @@
     <height>242</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>324</width>
+    <height>242</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>324</width>
+    <height>242</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>BOT</string>
   </property>
@@ -18,6 +30,12 @@
     <item row="4" column="4">
      <widget class="QPushButton" name="followB">
       <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
        <size>
         <width>150</width>
         <height>40</height>
@@ -37,6 +55,12 @@
     <item row="4" column="5">
      <widget class="QPushButton" name="commentsB">
       <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
        <size>
         <width>150</width>
         <height>40</height>
@@ -63,8 +87,8 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
-        <height>16777215</height>
+        <width>150</width>
+        <height>40</height>
        </size>
       </property>
       <property name="sizeIncrement">
@@ -92,6 +116,12 @@
         <height>40</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
       <property name="baseSize">
        <size>
         <width>0</width>
@@ -106,6 +136,12 @@
     <item row="5" column="5">
      <widget class="QPushButton" name="unfollowB">
       <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
        <size>
         <width>150</width>
         <height>40</height>
@@ -130,6 +166,12 @@
         <height>40</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
       <property name="baseSize">
        <size>
         <width>0</width>
@@ -144,6 +186,12 @@
     <item row="3" column="4">
      <widget class="QPushButton" name="profileB">
       <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
        <size>
         <width>150</width>
         <height>40</height>
@@ -168,6 +216,12 @@
         <height>40</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
       <property name="baseSize">
        <size>
         <width>0</width>
@@ -187,6 +241,12 @@
         <height>40</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
       <property name="baseSize">
        <size>
         <width>0</width>
@@ -201,6 +261,12 @@
     <item row="1" column="5">
      <widget class="QPushButton" name="live_reportB">
       <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
        <size>
         <width>150</width>
         <height>40</height>

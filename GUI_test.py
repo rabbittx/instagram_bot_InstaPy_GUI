@@ -249,23 +249,14 @@ class Bot(QMainWindow):
         self.Business_Target_list = info['Business_Target_list']
         self.comments_list = info['comments_list']
 
-        # self.lstr_to_nstr(str)
+        self.profile.dontList.setText(self.lstr_to_nstr(str(self.dont_like)))
+        self.profile.ignoreList.setText(self.lstr_to_nstr(str(self.ignore_list)))
+        self.profile.friendList.setText(self.lstr_to_nstr(str(self.friend_list)))
+        self.profile.tagsList.setText(self.lstr_to_nstr(str(self.tags_list)))
+        self.profile.targetList.setText(self.lstr_to_nstr(str(self.target_list)))
+        self.profile.BtargetList.setText(self.lstr_to_nstr(str(self.Business_Target_list)))
+        self.profile.commentsList.setText(self.lstr_to_nstr(str(self.comments_list)))
 
-        self.dont_like = lstr_to_nstr(str(self.dont_like))
-        self.ignore_list = lstr_to_nstr(str(self.ignore_list))
-        self.friend_list = lstr_to_nstr(str(self.friend_list))
-        self.tags_list = lstr_to_nstr(str(self.tags_list))
-        self.target_list = lstr_to_nstr(str(self.target_list))
-        self.Business_Target_list = lstr_to_nstr(str(self.Business_Target_list))
-        self.comments_list = lstr_to_nstr(str(self.comments_list))
-
-        self.profile.dontList.setText(self.dont_like)
-        self.profile.ignoreList.setText(self.ignore_list)
-        self.profile.friendList.setText(self.friend_list)
-        self.profile.tagsList.setText(self.tags_list)
-        self.profile.targetList.setText(self.target_list)
-        self.profile.BtargetList.setText(self.Business_Target_list)
-        self.profile.commentsList.setText(self.comments_list)
 
     """ **************************** END ****************************** """
 
@@ -331,14 +322,18 @@ class Bot(QMainWindow):
             tag = tag
         return tag
 
+    def lstr_to_nstr(self, lstr):
+        strs = lstr
+        nstr = re.sub(r'[?|$|.|!]', r'', strs)
+        nestr = re.sub(r'[^a-zA-Z0-9 ]', r'', nstr)
+        return nestr
+
     """ **************************** END ****************************** """
 
 
-def lstr_to_nstr(lstr):
-    strs = lstr
-    nstr = re.sub(r'[?|$|.|!]', r'', strs)
-    nestr = re.sub(r"[^a-zA-Z0-9 ]", r'', nstr)
-    return nestr
+
+
+
 
 
 if __name__ == '__main__':
