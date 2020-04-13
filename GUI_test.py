@@ -76,7 +76,7 @@ class Bot(QMainWindow):
         self.MainPage.endB.clicked.connect(self.end_bot)
         self.MainPage.profileB.clicked.connect(self.show_profile)
         # live_report not work
-        self.MainPage.live_reportB.clicked.connect(self.showreport)
+        self.MainPage.live_reportB.clicked.connect(self.show_report)
 
     def profile_page_button(self):
         # TODO profile page button here !
@@ -130,7 +130,7 @@ class Bot(QMainWindow):
 
     def do_like(self):
         self.session.like_by_tags(self.tags_list,
-                                  amount=int(self.amount_like),
+                                  amount=int(self.amount_like/10),
                                   interact=True)
 
     def do_follow(self):
@@ -167,6 +167,8 @@ class Bot(QMainWindow):
                                            sleep_delay=random.randint(26, 38),
                                            interact=True)
 
+    # TODO comments not work need to work (work in mix)
+    # want get amount from user and do comments
     def do_comments(self):
         self.session.set_user_interact(amount=3, randomize=True, percentage=100,
                                        media='Photo')
@@ -187,11 +189,10 @@ class Bot(QMainWindow):
     def show_profile(self):
         self.profile.show()
 
-    def showreport(self):
+    # TODO live report not work need to fix
+    # want to show the user activity report !
+    def show_report(self):
         self.live_Report.show()
-        report = self.session.live_report()
-        print(report)
-        self.live_Report.liveReport.setText(report)
 
     """ **************************** END ****************************** """
 
@@ -218,7 +219,6 @@ class Bot(QMainWindow):
 
     def close_profile(self):
         self.profile.hide()
-
         self.MainPage.show()
 
     def save_profile(self):
@@ -273,10 +273,11 @@ class Bot(QMainWindow):
 
     def apply_amount(self):
         # check to just get int not more as 150 move for max
-        self.amount_like = self.amount_page.like_amount.text()
-        self.amount_follow = self.amount_page.follow_amount.text()
-        self.amount_unfollow = self.amount_page.unfollow_amount.text()
-        self.amount_mix = self.amount_page.mix_amount.text()
+        self.amount_like = int(self.amount_page.like_amount.text())
+        self.amount_follow = int(self.amount_page.follow_amount.text())
+        self.amount_unfollow = int(self.amount_page.unfollow_amount.text())
+        self.amount_mix = int(self.amount_page.mix_amount.text())
+
 
     def auto_fill_amount(self):
         with open('profile info/amount_info.txt', 'r', encoding='utf-8') as f:
@@ -284,20 +285,16 @@ class Bot(QMainWindow):
                 f.readline()
 
         info = literal_eval(lines)
-        print(info)
-        self.amount_like = info["like"]
-        self.amount_follow = info["follow"]
-        self.amount_unfollow = info["unfollow"]
-        self.amount_mix = info["mix"]
+        self.amount_like = int(info["like"])
+        self.amount_follow = int(info["follow"])
+        self.amount_unfollow = int(info["unfollow"])
+        self.amount_mix = int(info["mix"])
         # need to change to int
-        self.amount_page.like_amount.setText(self.amount_like)
-        self.amount_page.follow_amount.setText(self.amount_follow)
-        self.amount_page.unfollow_amount.setText(self.amount_unfollow)
-        self.amount_page.mix_amount.setText(self.amount_mix)
-        self.amount_like = int(self.amount_like)
-        self.amount_follow = int(self.amount_follow)
-        self.amount_unfollow = int(self.amount_unfollow)
-        self.amount_mix = int(self.amount_mix)
+        self.amount_page.like_amount.setText(str(self.amount_like))
+        self.amount_page.follow_amount.setText(str(self.amount_follow))
+        self.amount_page.unfollow_amount.setText(str(self.amount_unfollow))
+        self.amount_page.mix_amount.setText(str(self.amount_mix))
+
 
     def show_amount(self):
         self.amount_page.show()
@@ -314,6 +311,7 @@ class Bot(QMainWindow):
             info = dict(zip(amount_size, data))
 
             f.write("%s" % info)
+
 
     def close_amount(self):
         self.amount_page.hide()
