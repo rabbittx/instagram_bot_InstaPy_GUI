@@ -1,0 +1,1 @@
+{'dont_like': ['region', 'terrorist', 'mason'], 'ignore_list': ['tataloo', 'government', 'Religion'], 'friend_list': ['rabbittlife', 'cliparchive'], 'tags_list': ['fun', 'clip', 'funy'], 'target_list': ['cliparchive'], 'Business_Target_list': ['cliparchive'], 'comments_list': ['cool', 'nice good one']}

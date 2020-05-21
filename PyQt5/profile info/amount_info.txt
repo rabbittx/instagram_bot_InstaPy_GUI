@@ -1,0 +1,1 @@
+{'like': 1, 'follow': 20, 'unfollow': 30, 'mix': 40}
