@@ -15,14 +15,17 @@ html {
 	height: 80%;
 	margin: 50px;
 	padding:  30px;
-	align-items: center;
+	justify-content: center;
+	align-content: : center;
 	border-radius: 25px;
 }
 
 .activetiy-checkbox{
 	display: grid;display: grid;
-	grid-template-columns: repeat(auto-fill,minmax(100%,2fr));
+	grid-template-columns: repeat(auto-fill,minmax(1fr,4fr));
 	background-color: green;
+	justify-content: center;
+	align-content: : center;
 	margin: 10px;
 	padding: 20px;
 }
@@ -39,9 +42,22 @@ html {
 	border-radius: 25px;
 }
 
+
+.raid-checkbox {
+	display: grid;display: grid;
+	grid-template-columns: repeat(auto-fill,minmax(1fr,4fr));
+	background-color: red;
+	justify-content: center;
+	align-content: : center;
+	margin: 10px;
+	padding: 20px;
+
+}
+
+
 .radio-box {
 	display: grid;
-	grid-template-columns: repeat(auto-fill,minmax(100px,2fr));
+	grid-template-columns: repeat(auto-fill,minmax(50px,2fr));
 	padding: 10px;
 	background-color: blue;
 	grid-column-gap: 5px;
@@ -58,11 +74,24 @@ html {
 
 }
 
-.button-box {
+.buttons-box {
+	background-color: orange;
+	display: grid;
+	grid-template-columns: repeat(auto-fill,minmax(50%,2fr));
+	
+	margin: 10px;
+	padding: 10px;
+
+		}
+
+.buttons {
 	display: grid;
 	grid-template-columns: repeat(auto-fill,minmax(80px,2fr));
-	grid-column-gap: 10%;
-	}
+
+}
+
+
+
 
 .warp-box {
 	background-color: rgb(50,78,100);
